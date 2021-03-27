@@ -17,12 +17,12 @@ the difference k =  2,thereare four pairs with difference 2:
 # runtime: n * (n-1) * (n-2)... 1, looks like O(n2)
 
 l=[1,  7,  5,  9,  2,  12,  3]
-
-def diff_bruteforce(l):
+k=2
+def diff_bruteforce(l, k):
     pairs=[]
     for n, x in enumerate(l):
         for y in l[n:]:
-            if abs(x-y)==2:
+            if abs(x-y)==k:
                 pairs.append((x,y))
 
     return pairs
@@ -33,13 +33,16 @@ def diff_bruteforce(l):
 # count the number of x+-y==K for each x
 # then find sum of values
 
-def diff_hash(l):
-    dd=defaultdict()
+def diff_hash(l, k):
+    dd=defaultdict(int)
     for x in l:
-        print(x)
-        dd.update(x)
+        # checks to see if the pair already exists as well
+        if (x+k in l and dd[x+k]) or (x-k in l and dd[x-k]):
+            dd[x]+=1
     print(dd)
-    return
+
+    return sum(dd.values())
 
 if __name__ == "__main__":
-    diff_hash(l)
+    ans=diff_hash(l, k)
+    print(ans)
