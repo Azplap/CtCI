@@ -1,7 +1,8 @@
 import timeit
 from collections import defaultdict
-# Bottlenecks
+from tqdm import tqdm
 
+# Bottlenecks
 """
 Example: Given an array of distinct integer values,
 count the number of pairs of integers that have difference k.
@@ -32,17 +33,52 @@ def diff_bruteforce(l, k):
 # I'll use a defaultdict (hashtable) to do it efficiently
 # count the number of x+-y==K for each x
 # then find sum of values
-
+# runtime: O(n), just passes through list once!
 def diff_hash(l, k):
     dd=defaultdict(int)
-    for x in l:
+    for n,x in enumerate(l):
         # checks to see if the pair already exists as well
-        if (x+k in l and dd[x+k]) or (x-k in l and dd[x-k]):
+        if (x+k in l and dd[x+k]==0):
+            dd[x]+=1
+        if (x-k in l and dd[x-k]==0):
             dd[x]+=1
     print(dd)
 
     return sum(dd.values())
 
+
+
+"""
+Example: Print all positive integer solutions to the equation a3 + b3 = c3 +d3
+where a, b, c, and d are integers between 1 and 1000.
+"""
+# brutforce first
+# the classic quadruple for loop
+# should be right though...
+# update: yikes
+
+n=range(1,1000)
+def findNums_bruteforce():
+    solutions=[]
+    for a in tqdm(n):
+        for b in n:
+            for c in n:
+                for d in n:
+                    if (a^3 + b^3) == (c^3 + d^3):
+                        solutions.append((a,b,c,d))
+    return solutions
+
+
+# okay... optimizations!
+#
+
+
+
 if __name__ == "__main__":
-    ans=diff_hash(l, k)
-    print(ans)
+    # ans=diff_hash(l, k)
+    # print(ans)
+
+    # ans=findNums_bruteforce()
+    # print(ans)
+    for x in tqdm(range(0,10000)):
+        pass
