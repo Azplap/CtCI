@@ -1,6 +1,7 @@
 import timeit
 from collections import defaultdict
-from tqdm import tqdm
+import json
+#from tqdm import tqdm
 
 # Bottlenecks
 """
@@ -70,15 +71,103 @@ def findNums_bruteforce():
 
 
 # okay... optimizations!
-#
+# something something hashtables
+# calculate pairs first and then compare pairs w/ O(1) lookups
+# 2 sets of pairs, should be O(n2) now
+# update: finished quickly but... its just the same shit on both sides...
+# update 2: after removing duplicates there seems to be a lot of cool pairs as well.
+n=range(1,100)
+def findNums_hashtables():
+    dict_ab={}
+    for a in n:
+        for b in n:
+            dict_ab[(a,b)]=(a**3+b**3)
+    dict_cd={}
+    for c in n:
+        for d in n:
+            dict_cd[(c,d)]=(c**3+d**3)
 
+    ans=[]
+    for ab in dict_ab.keys():
+        for cd in dict_cd.keys():
+            if dict_ab.get(ab) == dict_cd.get(cd):
+                ans.append([ab, cd])
+    return ans
+
+def write_to_file(ls):
+    with open("file.txt", "w") as fp:
+        json.dump(ls, fp)
+
+def open_and_check():
+    with open("file.txt", "r") as fp:
+        b = json.load(fp)
+
+    new=[]
+    for x in b:
+        if (x[0][0] not in x[1]) and (x[0][1] not in x[1]):
+            new.append(x)
+    for x in new:
+        print(new)
+
+
+
+"""
+ Given a smaller string S and a bigger string B, design an algorithm
+ to find all permuta­tions of the shorter string within the longer one.
+ Print the location of each permutation.
+"""
+# first try, I think this is good: O(n)
+# correction: since you're also looping through s,
+# it would be O(S*B) in an example where s is much larger.
+# should be writing a function that applies to multiples cases anyways
+def string_1():
+    s='abc'
+    b='aabbcabcddcabc'
+    list_b=list(b)
+    ans=[]
+    try:
+        for x in range(len(list_b)):
+            one,two,three=list_b[x],list_b[x+1],list_b[x+2]
+            group=[one,two,three]
+            if s[0] in group and s[1] in group and s[2] in group:
+                ans.append(['Index: {index}'.format(index=x),[one,two,three]])
+    except IndexError:
+        return ans
+
+# O(S*B) isn't bad
+# can optimize further by skipping if encountered
+# char isn't in s
+
+def string_2(s,b):
+    bList=list(b)
+    ans=[]
+    try:
+        for x in range(len(b)):
+            group=[]
+            ugh=True
+            for y in range(len(s)):
+                if bList[x+y] not in s:
+                    ugh=False
+                    break
+                else:
+                    group.append(bList[x+y])
+            if ugh==True:
+                ans.append([x, group])
+
+    except IndexError:
+        return ans
 
 
 if __name__ == "__main__":
     # ans=diff_hash(l, k)
     # print(ans)
 
-    # ans=findNums_bruteforce()
-    # print(ans)
-    for x in tqdm(range(0,10000)):
-        pass
+    #ans=findNums_hashtables()
+    #print(ans)
+    #write_to_file(ans)
+    #open_and_check()
+
+    s='abc'
+    b='aabbcabcddcabc'
+    ans=string_2(s,b)
+    print(ans)
