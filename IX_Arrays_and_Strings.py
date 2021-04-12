@@ -64,6 +64,7 @@ def one_three(str):
             ans.append(x)
     return ''.join(ans)
 """
+***
 1.4 Palindrome Permutation: Given a string, write a function to check if it
 is a permutation of a palin­drome. A palindrome is a word or phrase that is
 the same forwards and backwards. A permutation is a rearrangement of letters.
@@ -75,13 +76,14 @@ the same forwards and backwards. A permutation is a rearrangement of letters.
 # Thats a solution, but it's giga inefficient.
 
 """
+***
 1.5 One Away: There are three types of edits that can be performed on strings:
  insert a character, remove a character, or replace a character.
  Given two strings, write a function to check if they are one edit (or zero edits) away.
 """
-# could check each of the three edits
-# or instead use the hash table again and see how many
-# differences there are for each character
+# could check each of the three edits or instead use the hash table again and see how many
+# differences there are for each character. Boils down to too many or too little of a char
+# or if the character isn't even there. Technically O(n)
 def one_five(str1, str2):
     d1,d2=defaultdict(int),defaultdict(int)
     for x in str1:
@@ -89,11 +91,66 @@ def one_five(str1, str2):
     for x in str2:
         d2[x]+=1
     differences=0
-    for x in d1.keys():
+    if len(d1.keys()) > len(d2.keys()):
+        larger = d1.keys()
+    else:
+        larger = d2.keys()
+    for x in larger:
         differences+= abs(d1[x] - d2[x])
+    return differences
+"""
+1.6 String Compression: Implement a method to perform basic string compression
+using the counts of repeated characters. For example, the string aabcccccaaa would become a2blc5a3.
+If the "compressed" string would not become smaller than the original string, your method should return the original string.
+You can assume the string has only uppercase and lowercase letters (a - z).
+"""
+# looks like we're using another hashtable!
+# don't have to walk through it b4 hand it seems prettys simple
+# base case: no string or not String. Looks like str is the keyword for string type!
+#
+# uh oh didn't READ CAREFULLLLLLY!! Bad habit. Should only add consecutive.
+# can loop once, and use a counter that resets, checks the prev iteration to see if
+# it's the same. still O(n)
+def one_six(string):
+    # base case
+    if type(string) != str or string==None:
+        return None
+    counter,prev,compressed=0,string[0],[]
+    for character in string:
+        # adds character and count after new character
+        if character!=prev:
+            compressed.extend([prev,str(counter)])
+            prev=character
+            counter=1
+        # replaces prev AND increments count
+        else:
+            prev=character
+            counter+=1
+    # adds last char after string ends haha
+    compressed.extend([prev, str(counter)])
+    # check length
+    print(compressed)
+    if len(compressed)>len(string):
+        return string
+    else:
+        return ''.join(compressed)
 
-
+"""
+1.7 Rotate Matrix: Given an image represented by an NxN matrix,
+where each pixel in the image is 4 bytes, write a method to rotate the image by 90 degrees.Can you do this in place?
+"""
+# AHHH ANOTHER MATRIX ONE ITS BEEN TOO LONG
+# pretty sure theres a really pythonic way to do this
+matrix=[[1,2,3],
+        [4,5,6],
+        [7,8,9]]
+def one_seven(matrix):
+    new=[]
+    for row in matrix[::-1]:
+        for value in row:
+            new.append(value)
+    return new
 
 if __name__ == '__main__':
-    ans = one_three(' ')
+    ans = one_seven(matrix)
     print(ans)
