@@ -64,7 +64,6 @@ def one_three(str):
             ans.append(x)
     return ''.join(ans)
 """
-***
 1.4 Palindrome Permutation: Given a string, write a function to check if it
 is a permutation of a palin­drome. A palindrome is a word or phrase that is
 the same forwards and backwards. A permutation is a rearrangement of letters.
@@ -74,6 +73,29 @@ the same forwards and backwards. A permutation is a rearrangement of letters.
 # a palindrome. First 'hard one'.
 # Could come up w/ all permutations and then check if the reverse of each is True
 # Thats a solution, but it's giga inefficient.
+# A string that fits the bill would need to have an even number of
+# most of its numbers w/ one odd, if the length is odd.
+# Maybe I can run a mod check on the counts of each number.
+def one_four(string):
+    d=defaultdict(int)
+    for x in string:
+        if x !='':
+            d[x]+=1
+    if len(string)%2==0:
+        # if string is even
+        for value in d.values():
+            if value%2 != 0:
+
+                return False
+    else:
+        # if string is odd
+        counter=0
+        for value in d.values():
+            if value%2 != 0:
+                counter+=1
+            if counter==1:
+                return False
+    return True
 
 """
 ***
@@ -152,5 +174,7 @@ def one_seven(matrix):
     return new
 
 if __name__ == '__main__':
-    ans = one_seven(matrix)
+    ans=one_four('Tact Coa')
     print(ans)
+    # ans = one_seven(matrix)
+    # print(ans)
